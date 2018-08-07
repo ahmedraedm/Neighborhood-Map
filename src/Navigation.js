@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import Map from './Map'
-
-// import logo from './logo.svg';
 import './App.css';
 import './nav.css'
 
@@ -63,6 +61,7 @@ class Navigation extends Component {
                 this.state.filteredLocations.push(location)
             }
         }.bind(this))
+        this.Map.filterMarkers(query);
     }
 
     render() {
@@ -93,7 +92,7 @@ class Navigation extends Component {
                         id="myMap"
                         options={{
                         center: { lat: 41.0082, lng: 28.9784 },
-                        zoom: 8
+                        zoom: 13
                         }}
                         
                         locations={this.state.filteredLocations}

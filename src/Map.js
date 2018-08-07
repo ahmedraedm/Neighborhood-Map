@@ -8,19 +8,18 @@ class Map extends Component {
         this.onScriptLoad = this.onScriptLoad.bind(this);
         this.showMarkers = this.showMarkers.bind(this);
         this.makeMarkerIcon = this.makeMarkerIcon.bind(this);
-        // this.hideMarkers = this.hideMarkers.bind(this);
+        this.filterMarkers = this.filterMarkers.bind(this);
         this.showClicked = this.showClicked.bind(this);
-        // this.showSingleMarker = this.showSingleMarker.bind(this);
         this.clearHighlight = this.clearHighlight.bind(this);
-        // this.updateQuery = this.updateQuery.bind(this);
-        
-
+        this.getMarker = this.getMarker.bind(this);
+        this.clearMarkers = this.clearMarkers.bind(this);
     }
 
     state = {
         markers: [],
         myMap: {},
-        largeInfowindow: {}
+        largeInfowindow: {},
+        bounds:{}
     }
 
     onScriptLoad() {
@@ -33,7 +32,6 @@ class Map extends Component {
         const map = new window.google.maps.Map(
             document.getElementById(this.props.id),
             this.props.options);
-        // let markers = []
         let marker;
         this.props.locations.map(function (x) {
             marker = new window.google.maps.Marker({
@@ -43,22 +41,23 @@ class Map extends Component {
                 icon: defaultIcon
                 //   id: i
             })
-            marker.addListener('click', function () {
+            marker.addListener('click', function (e) {
                 debugger
-
-                if (largeInfowindow.this != this) {
-                    largeInfowindow.this = this;
-                    largeInfowindow.setContent('<div>' + this.title + '</div>');
-                    largeInfowindow.open(map, this);
-                    this.setIcon(highlightedIcon);
-                    largeInfowindow.addListener('closeclick', function () {
-                        largeInfowindow.this = null;
-
-                    });
-                } else {
-                    this.setIcon(highlightedIcon);
+                let selMarker = this.getMarker(e);
+                if (this.state.largeInfowindow.this != selMarker) {
+                    this.state.largeInfowindow.this = selMarker;
+                    this.state.largeInfowindow.setContent('<div>' + selMarker.title + '</div>');
+                    this.state.largeInfowindow.open(map, selMarker);
+                    selMarker.setIcon(highlightedIcon);
+                    this.state.largeInfowindow.addListener('closeclick', function () {
+                        debugger
+                        this.state.largeInfowindow.selMarker = null;
+                        this.clearHighlight();
+                    }.bind(this));
+                }else {
+                    selMarker.setIcon(highlightedIcon);
                 }
-            }
+            }.bind(this)
             );
             marker.addListener('mouseover', function () {
                 this.setIcon(highlightedIcon);
@@ -80,6 +79,15 @@ class Map extends Component {
         this.showMarkers(map)
     }
 
+    getMarker(e){
+        debugger
+        let selMarker;
+        this.state.markers.map(function(x) {
+            if(x.title===e.va.currentTarget.title){selMarker= x}
+       })
+       return selMarker
+    }
+
     clearHighlight() {
         debugger
         var defaultIcon = this.makeMarkerIcon('0091ff');
@@ -87,12 +95,6 @@ class Map extends Component {
             this.state.markers[i].setIcon(defaultIcon)
         }
     }
-
-    // updateQuery(query){
-    //     this.props.locations.map(function (location) {
-            
-    //     })
-    // }
 
     showClicked(selected) {
         debugger
@@ -106,9 +108,6 @@ class Map extends Component {
                     this.state.largeInfowindow.this = this.state.markers[i];
                     this.state.largeInfowindow.setContent('<div>' + this.state.markers[i].title + '</div>');
                     this.state.largeInfowindow.open(this.state.myMap, this.state.markers[i]);
-                    this.state.largeInfowindow.addListener('closeclick', function () {
-                        this.state.largeInfowindow.this = null;
-                    });
                 }
             } else {
                 this.state.markers[i].setIcon(defaultIcon)
@@ -116,11 +115,27 @@ class Map extends Component {
         }
     }
 
-    // hideMarkers() {
-    //     this.state.markers.map(function (marker) {
-    //         marker.setMap(null);
-    //     })
-    // }
+    clearMarkers(){
+        debugger
+        this.state.largeInfowindow.close()
+    }
+
+    filterMarkers(query) {
+        this.clearHighlight()
+        this.clearMarkers()
+        let map = this.state.myMap;
+        this.state.markers.map(function (marker) {
+            debugger
+            if(!marker.title.toLowerCase().includes(query.toLowerCase())){
+              marker.setMap(null);
+            }else{
+                marker.setMap(map),
+                this.state.bounds.extend(marker.position)
+                map.fitBounds(this.state.bounds);
+                
+            }
+        }.bind(this))
+    }
 
 
     makeMarkerIcon(markerColor) {
@@ -135,25 +150,14 @@ class Map extends Component {
     }
 
     showMarkers(map) {
-        const bounds = new window.google.maps.LatLngBounds();
+        this.state.bounds = new window.google.maps.LatLngBounds();
         // Extend the boundaries of the map for each marker and display the marker
         this.state.markers.map((marker) => (
             marker.setMap(map),
-            bounds.extend(marker.position)
+            this.state.bounds.extend(marker.position)
         ))
-        map.fitBounds(bounds);
+        map.fitBounds(this.state.bounds);
     }
-
-    // showSingleMarker(map, selected) {
-    //     debugger
-    //     const bounds = new window.google.maps.LatLngBounds();
-    //     this.state.markers.filter(marker => marker.title === selected[0].title).map(function (marker) {
-    //         marker.setMap(map),
-    //             bounds.extend(marker.position)
-    //         map.fitBounds(bounds);
-    //     })
-
-    // }
 
     componentWillUnmount() {
         this.props.onRef(undefined)
