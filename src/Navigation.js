@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Map from './Map'
 
-
 // import logo from './logo.svg';
 import './App.css';
 import './nav.css'
@@ -11,6 +10,7 @@ class Navigation extends Component {
     constructor() {
         super();
         this.hamburgerIcon = this.hamburgerIcon.bind(this);
+        this.showClicked = this.showClicked.bind(this);
     }
 
     state ={
@@ -20,7 +20,9 @@ class Navigation extends Component {
           {title: 'Valley of Queens', location: {lat: 25.7285836, lng: 32.5907332}},
           {title: 'Medinet Habu', location: {lat: 25.7193131, lng: 32.5991514}},
           {title: 'Tombs of the Nobles', location: {lat: 25.7317558, lng: 32.6048123}}
-        ]
+        ],
+        myMap:{},
+        markers:[]
       }
 
     hamburgerIcon() {
@@ -35,6 +37,21 @@ class Navigation extends Component {
         drawer.classList.toggle('open');
     }
 
+    // setMap(map,markers){
+    //     debugger
+    //     // this.setState({ myMap: map})
+    //     // this.hideMarkers(map)
+    //     markers.map(function(marker) {
+    //     debugger
+    //         marker.setMap(null);
+    //     })
+    // }
+
+    
+    showClicked(evt) {
+        this.Map.showClicked(evt);
+    }
+
     render() {
         return (
             <div className="container">
@@ -45,7 +62,8 @@ class Navigation extends Component {
                 <nav id="mySidenav" className="sidenav box20">
                     <ul>
                         {this.state.locations.map((location)=>(
-                        <li className="nav_item"><a href="#">{location.title}</a></li>
+                        <li className="nav_item">
+                        <a href="#" onClick={this.showClicked}>{location.title} </a></li>
                         ))}
                     </ul>
                 </nav>
@@ -59,6 +77,7 @@ class Navigation extends Component {
                         }}
                         
                         locations={this.state.locations}
+                        onRef={ref => (this.Map = ref)}
                     />
                 </div>
             </div >
