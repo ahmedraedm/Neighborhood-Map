@@ -11,6 +11,8 @@ class Navigation extends Component {
         super();
         this.hamburgerIcon = this.hamburgerIcon.bind(this);
         this.showClicked = this.showClicked.bind(this);
+        this.updateQuery = this.updateQuery.bind(this);
+        
     }
 
     state ={
@@ -21,8 +23,17 @@ class Navigation extends Component {
           {title: 'Medinet Habu', location: {lat: 25.7193131, lng: 32.5991514}},
           {title: 'Tombs of the Nobles', location: {lat: 25.7317558, lng: 32.6048123}}
         ],
+        filteredLocations : [
+            {title: 'Mortuary Temple of Hatshepsut', location: {lat: 25.7370083, lng: 32.6049106}},
+            {title: 'Temple of Karnak', location: {lat: 25.7188346, lng: 32.6550816}},
+            {title: 'Valley of Queens', location: {lat: 25.7285836, lng: 32.5907332}},
+            {title: 'Medinet Habu', location: {lat: 25.7193131, lng: 32.5991514}},
+            {title: 'Tombs of the Nobles', location: {lat: 25.7317558, lng: 32.6048123}}
+        ],
         myMap:{},
-        markers:[]
+        markers:[],
+        query: ''
+
       }
 
     hamburgerIcon() {
@@ -37,19 +48,21 @@ class Navigation extends Component {
         drawer.classList.toggle('open');
     }
 
-    // setMap(map,markers){
-    //     debugger
-    //     // this.setState({ myMap: map})
-    //     // this.hideMarkers(map)
-    //     markers.map(function(marker) {
-    //     debugger
-    //         marker.setMap(null);
-    //     })
-    // }
-
-    
     showClicked(evt) {
         this.Map.showClicked(evt);
+    }
+
+    updateQuery(queryString){
+        debugger
+        this.state.filteredLocations = []
+        let query = queryString.trim()
+        this.setState({query: query});
+        this.state.locations.map(function (location) {
+            debugger
+            if (location.title.toLowerCase().includes(query.toLowerCase())) { // Neglect case sensitive
+                this.state.filteredLocations.push(location)
+            }
+        }.bind(this))
     }
 
     render() {
@@ -57,11 +70,18 @@ class Navigation extends Component {
             <div className="container">
                 <div className="box" id="main">
                     <span id="icon" onClick={this.hamburgerIcon}>&#9776; </span>
-                    {/* <span>Neighborhood App</span> */}
                 </div>
                 <nav id="mySidenav" className="sidenav box20">
+
                     <ul>
-                        {this.state.locations.map((location)=>(
+                    <input
+                                id='filter'
+                                type="text"
+                                placeholder="Filter by location title"
+                                value={this.state.query}
+                                onChange={(event) => this.updateQuery(event.target.value)}
+                            />
+                        {this.state.filteredLocations.map((location)=>(
                         <li className="nav_item">
                         <a href="#" onClick={this.showClicked}>{location.title} </a></li>
                         ))}
@@ -76,7 +96,7 @@ class Navigation extends Component {
                         zoom: 8
                         }}
                         
-                        locations={this.state.locations}
+                        locations={this.state.filteredLocations}
                         onRef={ref => (this.Map = ref)}
                     />
                 </div>

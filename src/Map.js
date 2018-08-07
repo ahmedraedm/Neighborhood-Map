@@ -12,6 +12,8 @@ class Map extends Component {
         this.showClicked = this.showClicked.bind(this);
         // this.showSingleMarker = this.showSingleMarker.bind(this);
         this.clearHighlight = this.clearHighlight.bind(this);
+        // this.updateQuery = this.updateQuery.bind(this);
+        
 
     }
 
@@ -85,6 +87,12 @@ class Map extends Component {
             this.state.markers[i].setIcon(defaultIcon)
         }
     }
+
+    // updateQuery(query){
+    //     this.props.locations.map(function (location) {
+            
+    //     })
+    // }
 
     showClicked(selected) {
         debugger
