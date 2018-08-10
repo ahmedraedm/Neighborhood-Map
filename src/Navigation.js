@@ -15,18 +15,18 @@ class Navigation extends Component {
 
     state ={
         locations : [
-          {title: 'Mortuary Temple of Hatshepsut', location: {lat: 25.7370083, lng: 32.6049106}},
-          {title: 'Temple of Karnak', location: {lat: 25.7188346, lng: 32.6550816}},
-          {title: 'Valley of Queens', location: {lat: 25.7285836, lng: 32.5907332}},
-          {title: 'Medinet Habu', location: {lat: 25.7193131, lng: 32.5991514}},
-          {title: 'Tombs of the Nobles', location: {lat: 25.7317558, lng: 32.6048123}}
+          {title: 'Mortuary Temple of Hatshepsut', location: {lat: 25.7370083, lng: 32.6049106}, textToSearch:'Mortuary Temple of Hatshepsut'},
+          {title: 'Temple of Karnak', location: {lat: 25.7188346, lng: 32.6550816}, textToSearch:'Karnak'},
+          {title: 'Valley of the Queens', location: {lat: 25.7285836, lng: 32.5907332}, textToSearch:'Valley of the Queens'},
+          {title: 'Medinet Habu', location: {lat: 25.7193131, lng: 32.5991514}, textToSearch:'Medinet Habu (temple)'},
+          {title: 'Tombs of the Nobles', location: {lat: 25.7317558, lng: 32.6048123}, textToSearch:'List of Theban tombs'}
         ],
         filteredLocations : [
-            {title: 'Mortuary Temple of Hatshepsut', location: {lat: 25.7370083, lng: 32.6049106}},
-            {title: 'Temple of Karnak', location: {lat: 25.7188346, lng: 32.6550816}},
-            {title: 'Valley of Queens', location: {lat: 25.7285836, lng: 32.5907332}},
-            {title: 'Medinet Habu', location: {lat: 25.7193131, lng: 32.5991514}},
-            {title: 'Tombs of the Nobles', location: {lat: 25.7317558, lng: 32.6048123}}
+            {title: 'Mortuary Temple of Hatshepsut', location: {lat: 25.7370083, lng: 32.6049106}, textToSearch:'Mortuary Temple of Hatshepsut'},
+            {title: 'Temple of Karnak', location: {lat: 25.7188346, lng: 32.6550816}, textToSearch:'Karnak'},
+            {title: 'Valley of the Queens', location: {lat: 25.7285836, lng: 32.5907332}, textToSearch:'Valley of the Queens'},
+            {title: 'Medinet Habu', location: {lat: 25.7193131, lng: 32.5991514}, textToSearch:'Medinet Habu (temple)'},
+            {title: 'Tombs of the Nobles', location: {lat: 25.7317558, lng: 32.6048123}, textToSearch:'List of Theban tombs'}
         ],
         myMap:{},
         markers:[],

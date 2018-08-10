@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
+import './nav.css'
 
 class Map extends Component {
 
@@ -13,13 +14,14 @@ class Map extends Component {
         this.clearHighlight = this.clearHighlight.bind(this);
         this.getMarker = this.getMarker.bind(this);
         this.clearMarkers = this.clearMarkers.bind(this);
+        this.fetch = this.fetch.bind(this);
     }
 
     state = {
         markers: [],
         myMap: {},
         largeInfowindow: {},
-        bounds:{}
+        bounds: {}
     }
 
     onScriptLoad() {
@@ -34,29 +36,33 @@ class Map extends Component {
             this.props.options);
         let marker;
         this.props.locations.map(function (x) {
+            debugger
             marker = new window.google.maps.Marker({
                 position: x.location,
                 title: x.title,
+                textToSearch: x.textToSearch,
                 animation: window.google.maps.Animation.DROP,
                 icon: defaultIcon
                 //   id: i
             })
             marker.addListener('click', function (e) {
-                debugger
+                // debugger
                 let selMarker = this.getMarker(e);
+                debugger
                 if (this.state.largeInfowindow.this != selMarker) {
                     this.state.largeInfowindow.this = selMarker;
-                    this.state.largeInfowindow.setContent('<div>' + selMarker.title + '</div>');
                     this.state.largeInfowindow.open(map, selMarker);
                     selMarker.setIcon(highlightedIcon);
                     this.state.largeInfowindow.addListener('closeclick', function () {
                         debugger
-                        this.state.largeInfowindow.selMarker = null;
+                        console.log(selMarker)
+                        this.state.largeInfowindow.this = null;
                         this.clearHighlight();
                     }.bind(this));
-                }else {
+                } else {
                     selMarker.setIcon(highlightedIcon);
                 }
+                this.fetch(selMarker)
             }.bind(this)
             );
             marker.addListener('mouseover', function () {
@@ -79,13 +85,26 @@ class Map extends Component {
         this.showMarkers(map)
     }
 
-    getMarker(e){
+    fetch(selMarker) {
         debugger
+        fetch(`https://en.wikipedia.org/w/api.php?&origin=*&action=opensearch&search='${selMarker.textToSearch}'&limit=5`)
+            .then(function (resp) {
+                return resp.json()
+            }).then(function (data) {
+                debugger
+                this.state.largeInfowindow.setContent('<div class="title">' + '<h2>' + selMarker.title + '</h2>'
+                    + '</div>' + '<div>' + '<span>' + data[2][0] + '</span>' + '</div>' + '<div class="link">'
+                    + '<a href="#">' + data[3][0] + '</a>' + '</div>');
+            }.bind(this))
+    }
+
+    getMarker(e) {
+        // debugger
         let selMarker;
-        this.state.markers.map(function(x) {
-            if(x.title===e.va.currentTarget.title){selMarker= x}
-       })
-       return selMarker
+        this.state.markers.map(function (x) {
+            if (x.title === e.va.currentTarget.title) { selMarker = x }
+        })
+        return selMarker
     }
 
     clearHighlight() {
@@ -104,10 +123,11 @@ class Map extends Component {
         for (let i = 0; i < this.state.markers.length; i++) {
             if (this.state.markers[i].title === text) {
                 this.state.markers[i].setIcon(highlightedIcon)
+                let selMarker = this.state.markers[i]
                 if (this.state.largeInfowindow.this != this.state.markers[i]) {
                     this.state.largeInfowindow.this = this.state.markers[i];
-                    this.state.largeInfowindow.setContent('<div>' + this.state.markers[i].title + '</div>');
                     this.state.largeInfowindow.open(this.state.myMap, this.state.markers[i]);
+                    fetch(selMarker)
                 }
             } else {
                 this.state.markers[i].setIcon(defaultIcon)
@@ -115,24 +135,25 @@ class Map extends Component {
         }
     }
 
-    clearMarkers(){
+    clearMarkers() {
         debugger
         this.state.largeInfowindow.close()
     }
 
     filterMarkers(query) {
+        debugger
         this.clearHighlight()
         this.clearMarkers()
         let map = this.state.myMap;
         this.state.markers.map(function (marker) {
             debugger
-            if(!marker.title.toLowerCase().includes(query.toLowerCase())){
-              marker.setMap(null);
-            }else{
+            if (!marker.title.toLowerCase().includes(query.toLowerCase())) {
+                marker.setMap(null);
+            } else {
                 marker.setMap(map),
-                this.state.bounds.extend(marker.position)
+                    this.state.bounds.extend(marker.position)
                 map.fitBounds(this.state.bounds);
-                
+
             }
         }.bind(this))
     }
