@@ -88,9 +88,9 @@ class Map extends Component {
 
     fetch(selMarker) {
         // debugger
-        let placeId=''
-        let content=''
-        let keywordIndex=''
+        let placeId = ''
+        let content = ''
+        let keywordIndex = ''
         var request = {
             location: this.state.myMap.getCenter(),
             radius: '500',
@@ -98,29 +98,48 @@ class Map extends Component {
         };
         var service = new window.google.maps.places.PlacesService(this.state.myMap);
         // debugger
-        service.textSearch(request, function(results, status) {
+        service.textSearch(request, function (results, status) {
             // debugger
-            placeId= results[0].place_id
-            var request = {
-            placeId: placeId,
-          };
-          service.getDetails(request, function (place, status) {
-              debugger
-              content = '<img src='+place.photos[0].getUrl({'maxWidth': 200, 'maxHeight': 220})+' '+'alt='+ selMarker.title +'>' 
-                        + '<img src='+place.photos[1].getUrl({'maxWidth': 200, 'maxHeight': 220})+' '+'alt='+ selMarker.title +'>'
-                        + '<img src='+place.photos[3].getUrl({'maxWidth': 200, 'maxHeight': 220})+' '+'alt='+ selMarker.title +'>'
-              fetch(`https://en.wikipedia.org/w/api.php?&origin=*&action=opensearch&search='${selMarker.textToSearch}'&limit=5`)
-            .then(function (resp) {
-                return resp.json()
-            }.bind(this)).then(function (data) {
-                debugger
-                keywordIndex = selMarker.keywordIndex
-                this.state.largeInfowindow.setContent('<div class="title">' + '<h2>' + selMarker.title + '</h2>'
-                    + '</div>' + '<div>' + '<span>' + data[2][keywordIndex] + '</span>' + '</div>' + '<div class="link">'
-                    + '<a href=' + data[3][keywordIndex]+ '>' + data[3][keywordIndex] + '</a>' + '</div>' + '<div>' + content +'</div>'
-                    + '<div><span id="source">'+'Source: '+ '<a href=https://en.wikipedia.org/wiki/Main_Page>Wikipedia</a>' +'</span></div>');
-            }.bind(this))
-          }.bind(this));
+            let placeIdText = 'place_id'
+            debugger
+            //Error Handling
+            if (placeIdText in results[0]) {
+                placeId = results[0].place_id
+                var request = {
+                    placeId: placeId
+                }
+                service.getDetails(request, function (place, status) {
+                    if (status === 'OK') {
+                        debugger
+                        content = '<img src=' + place.photos[0].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
+                            + '<img src=' + place.photos[1].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
+                            + '<img src=' + place.photos[3].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
+                        fetch(`https://en.wikipedia.org/w/api.php?&origin=*&action=opensearch&search='${selMarker.textToSearch}'&limit=5`)
+                            .then(function (resp) {
+                                return resp.json()
+                            }.bind(this)).then(function (data) {
+                                if (data) {
+                                    debugger
+                                    keywordIndex = selMarker.keywordIndex
+                                    this.state.largeInfowindow.setContent('<div class="title">' + '<h2>' + selMarker.title + '</h2>'
+                                        + '</div>' + '<div>' + '<span>' + data[2][keywordIndex] + '</span>' + '</div>' + '<div class="link">'
+                                        + '<a href=' + data[3][keywordIndex] + '>' + data[3][keywordIndex] + '</a>' + '</div>' + '<div>' + content + '</div>'
+                                        + '<div><span id="source">' + 'Source: ' + '<a href=https://en.wikipedia.org/wiki/Main_Page>Wikipedia</a>' + '</span></div>');
+                                } else {
+                                    alert('Cannot load article data for this location: ' + selMarker.title)  // Couldn't retreive location article
+                                }
+                            }.bind(this))
+                            .catch(function (e) {
+                                debugger
+                                alert('Cannot load Infowindow data due to the following error: \n' + '"' + e.message + '"')
+                            })
+                    } else {
+                        alert('Images requested for location: ' + selMarker.title + ' cannot be retreived')  // Couldn't retreive location images
+                    }
+                }.bind(this));
+            } else {                  // Couldn't retreive location ID
+                alert('Location ID of: ' + selMarker.title + ' cannot be retreived')
+            }
         }.bind(this));
     }
 
