@@ -25,7 +25,7 @@ class Map extends Component {
     }
 
     onScriptLoad() {
-        debugger
+        // debugger
         this.props.onRef(this)
         var defaultIcon = this.makeMarkerIcon('0091ff');
         var highlightedIcon = this.makeMarkerIcon('FFFF24');
@@ -36,14 +36,14 @@ class Map extends Component {
             this.props.options);
         let marker;
         this.props.locations.map(function (x) {
-            debugger
             marker = new window.google.maps.Marker({
                 position: x.location,
                 title: x.title,
                 textToSearch: x.textToSearch,
                 animation: window.google.maps.Animation.DROP,
-                icon: defaultIcon
-                //   id: i
+                icon: defaultIcon,
+                keywordIndex: x.keywordIndex
+                // id: placeId
             })
             marker.addListener('click', function (e) {
                 // debugger
@@ -75,9 +75,10 @@ class Map extends Component {
             marker.addListener('mouseout', function () {
                 this.setIcon(defaultIcon);
             });
-            debugger
+            // debugger
             this.state.markers.push(marker)
         }.bind(this))
+
         debugger
         this.setState({
             myMap: map
@@ -86,16 +87,42 @@ class Map extends Component {
     }
 
     fetch(selMarker) {
-        debugger
-        fetch(`https://en.wikipedia.org/w/api.php?&origin=*&action=opensearch&search='${selMarker.textToSearch}'&limit=5`)
+        // debugger
+        let placeId=''
+        let content=''
+        let keywordIndex=''
+        var request = {
+            location: this.state.myMap.getCenter(),
+            radius: '500',
+            query: selMarker.textToSearch
+        };
+        var service = new window.google.maps.places.PlacesService(this.state.myMap);
+        // debugger
+        service.textSearch(request, function(results, status) {
+            // debugger
+            placeId= results[0].place_id
+            var request = {
+            placeId: placeId,
+          };
+          service.getDetails(request, function (place, status) {
+            //   debugger
+              content = '<img src='+place.photos[0].getUrl({'maxWidth': 200, 'maxHeight': 220})+'>' 
+                        + '<img src='+place.photos[1].getUrl({'maxWidth': 200, 'maxHeight': 220})+'>'
+                        + '<img src='+place.photos[3].getUrl({'maxWidth': 200, 'maxHeight': 220})+'>'
+              fetch(`https://en.wikipedia.org/w/api.php?&origin=*&action=opensearch&search='${selMarker.textToSearch}'&limit=5`)
             .then(function (resp) {
                 return resp.json()
-            }).then(function (data) {
+            }.bind(this)).then(function (data) {
                 debugger
+                keywordIndex = selMarker.keywordIndex
+                // (selMarker.textToSearch==='Karnak')?articleToShow=data[2][2]:''
                 this.state.largeInfowindow.setContent('<div class="title">' + '<h2>' + selMarker.title + '</h2>'
-                    + '</div>' + '<div>' + '<span>' + data[2][0] + '</span>' + '</div>' + '<div class="link">'
-                    + '<a href="#">' + data[3][0] + '</a>' + '</div>');
+                    + '</div>' + '<div>' + '<span>' + data[2][keywordIndex] + '</span>' + '</div>' + '<div class="link">'
+                    + '<a href=' + data[3][keywordIndex]+ '>' + data[3][keywordIndex] + '</a>' + '</div>' + '<div>' + content +'</div>'
+                    + '<div><span id="source">'+'Source: '+ '<a href=https://en.wikipedia.org/wiki/Main_Page>Wikipedia</a>' +'</span></div>');
             }.bind(this))
+          }.bind(this));
+        }.bind(this));
     }
 
     getMarker(e) {
@@ -108,7 +135,7 @@ class Map extends Component {
     }
 
     clearHighlight() {
-        debugger
+        // debugger
         var defaultIcon = this.makeMarkerIcon('0091ff');
         for (let i = 0; i < this.state.markers.length; i++) {
             this.state.markers[i].setIcon(defaultIcon)
@@ -116,7 +143,7 @@ class Map extends Component {
     }
 
     showClicked(selected) {
-        debugger
+        // debugger
         var defaultIcon = this.makeMarkerIcon('0091ff');
         var highlightedIcon = this.makeMarkerIcon('FFFF24');
         let text = selected.target.text.trim()
@@ -127,7 +154,7 @@ class Map extends Component {
                 if (this.state.largeInfowindow.this != this.state.markers[i]) {
                     this.state.largeInfowindow.this = this.state.markers[i];
                     this.state.largeInfowindow.open(this.state.myMap, this.state.markers[i]);
-                    fetch(selMarker)
+                    this.fetch(selMarker)
                 }
             } else {
                 this.state.markers[i].setIcon(defaultIcon)
@@ -136,12 +163,12 @@ class Map extends Component {
     }
 
     clearMarkers() {
-        debugger
+        // debugger
         this.state.largeInfowindow.close()
     }
 
     filterMarkers(query) {
-        debugger
+        // debugger
         this.clearHighlight()
         this.clearMarkers()
         let map = this.state.myMap;
@@ -188,7 +215,7 @@ class Map extends Component {
         if (!window.google) {
             var s = document.createElement('script');
             s.type = 'text/javascript';
-            s.src = `https://maps.google.com/maps/api/js?key=AIzaSyAgu2EhLwLKc3A2uqkqaV0uNFZ-j6ryk1Q`;
+            s.src = `https://maps.google.com/maps/api/js?libraries=places&key=AIzaSyAgu2EhLwLKc3A2uqkqaV0uNFZ-j6ryk1Q`;
             var x = document.getElementsByTagName('script')[0];
             x.parentNode.insertBefore(s, x);
             s.addEventListener('load', e => {

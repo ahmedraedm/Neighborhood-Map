@@ -81,7 +81,17 @@ body {
 
   .link{
     padding-top: 5px;
+    padding-bottom: 15px;
     font-weight: bold
+  }
+
+  img{
+    padding-right: 10px
+  }
+
+  #source{
+    font-weight: bold;
+    padding-top: 5px
   }
 
   .container {

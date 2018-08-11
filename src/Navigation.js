@@ -10,29 +10,35 @@ class Navigation extends Component {
         this.hamburgerIcon = this.hamburgerIcon.bind(this);
         this.showClicked = this.showClicked.bind(this);
         this.updateQuery = this.updateQuery.bind(this);
+        // this.setLocationId = this.setLocationId.bind(this);
         
     }
 
     state ={
         locations : [
-          {title: 'Mortuary Temple of Hatshepsut', location: {lat: 25.7370083, lng: 32.6049106}, textToSearch:'Mortuary Temple of Hatshepsut'},
-          {title: 'Temple of Karnak', location: {lat: 25.7188346, lng: 32.6550816}, textToSearch:'Karnak'},
-          {title: 'Valley of the Queens', location: {lat: 25.7285836, lng: 32.5907332}, textToSearch:'Valley of the Queens'},
-          {title: 'Medinet Habu', location: {lat: 25.7193131, lng: 32.5991514}, textToSearch:'Medinet Habu (temple)'},
-          {title: 'Tombs of the Nobles', location: {lat: 25.7317558, lng: 32.6048123}, textToSearch:'List of Theban tombs'}
+          {title: 'Mortuary Temple of Hatshepsut', location: {lat: 25.7370083, lng: 32.6049106}, textToSearch:'Mortuary Temple of Hatshepsut', keywordIndex:'0'},
+          {title: 'Temple of Karnak', location: {lat: 25.7188346, lng: 32.6550816}, textToSearch:'Karnak', keywordIndex:'2'},
+          {title: 'Valley of the Queens', location: {lat: 25.7285836, lng: 32.5907332}, textToSearch:'Valley of the Queens', keywordIndex:'0'},
+          {title: 'Medinet Habu', location: {lat: 25.7193131, lng: 32.5991514}, textToSearch:'Medinet Habu (temple)', keywordIndex:'0'}
+        //   {title: 'Tombs of the Nobles', location: {lat: 25.7317558, lng: 32.6048123}, textToSearch:'List of Theban tombs', placeID:''}
         ],
         filteredLocations : [
-            {title: 'Mortuary Temple of Hatshepsut', location: {lat: 25.7370083, lng: 32.6049106}, textToSearch:'Mortuary Temple of Hatshepsut'},
-            {title: 'Temple of Karnak', location: {lat: 25.7188346, lng: 32.6550816}, textToSearch:'Karnak'},
-            {title: 'Valley of the Queens', location: {lat: 25.7285836, lng: 32.5907332}, textToSearch:'Valley of the Queens'},
-            {title: 'Medinet Habu', location: {lat: 25.7193131, lng: 32.5991514}, textToSearch:'Medinet Habu (temple)'},
-            {title: 'Tombs of the Nobles', location: {lat: 25.7317558, lng: 32.6048123}, textToSearch:'List of Theban tombs'}
+            {title: 'Mortuary Temple of Hatshepsut', location: {lat: 25.7370083, lng: 32.6049106}, textToSearch:'Mortuary Temple of Hatshepsut', keywordIndex:'0'},
+            {title: 'Temple of Karnak', location: {lat: 25.7188346, lng: 32.6550816}, textToSearch:'Karnak', keywordIndex:'2'},
+            {title: 'Valley of the Queens', location: {lat: 25.7285836, lng: 32.5907332}, textToSearch:'Valley of the Queens', keywordIndex:'0'},
+            {title: 'Medinet Habu', location: {lat: 25.7193131, lng: 32.5991514}, textToSearch:'Medinet Habu (temple)', keywordIndex:'0'}
+            // {title: 'Tombs of the Nobles', location: {lat: 25.7317558, lng: 32.6048123}, textToSearch:'List of Theban tombs', placeID:''}
         ],
         myMap:{},
         markers:[],
         query: ''
 
       }
+
+    // setLocationId(locId, locTitle){
+    //     debugger
+    //     this.state.locations.filter(loc=>loc.title===locTitle).placeID=locId
+    // }
 
     hamburgerIcon() {
         // debugger
@@ -94,9 +100,9 @@ class Navigation extends Component {
                         center: { lat: 41.0082, lng: 28.9784 },
                         zoom: 13
                         }}
-                        
                         locations={this.state.filteredLocations}
                         onRef={ref => (this.Map = ref)}
+                        // setLocationId = {this.state.setLocationId}
                     />
                 </div>
             </div >
