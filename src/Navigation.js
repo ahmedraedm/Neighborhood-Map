@@ -11,29 +11,38 @@ class Navigation extends Component {
         this.showClicked = this.showClicked.bind(this);
         this.updateQuery = this.updateQuery.bind(this);
         // this.setLocationId = this.setLocationId.bind(this);
-        
+
     }
 
-    state ={
-        locations : [
-          {title: 'Mortuary Temple of Hatshepsut', location: {lat: 25.7370083, lng: 32.6049106}, textToSearch:'Mortuary Temple of Hatshepsut', keywordIndex:'0'},
-          {title: 'Temple of Karnak', location: {lat: 25.7188346, lng: 32.6550816}, textToSearch:'Karnak', keywordIndex:'2'},
-          {title: 'Valley of the Queens', location: {lat: 25.7285836, lng: 32.5907332}, textToSearch:'Valley of the Queens', keywordIndex:'0'},
-          {title: 'Medinet Habu', location: {lat: 25.7193131, lng: 32.5991514}, textToSearch:'Medinet Habu (temple)', keywordIndex:'0'}
-        //   {title: 'Tombs of the Nobles', location: {lat: 25.7317558, lng: 32.6048123}, textToSearch:'List of Theban tombs', placeID:''}
+    state = {
+        locations: [
+            { title: 'Mortuary Temple of Hatshepsut', location: { lat: 25.7370083, lng: 32.6049106 }, textToSearch: 'Mortuary Temple of Hatshepsut', keywordIndex: '0' },
+            { title: 'Temple of Karnak', location: { lat: 25.7188346, lng: 32.6550816 }, textToSearch: 'Karnak', keywordIndex: '2' },
+            { title: 'Valley of the Queens', location: { lat: 25.7285836, lng: 32.5907332 }, textToSearch: 'Valley of the Queens', keywordIndex: '0' },
+            { title: 'Medinet Habu', location: { lat: 25.7193131, lng: 32.5991514 }, textToSearch: 'Medinet Habu (temple)', keywordIndex: '0' },
+            { title: 'The Great Pyramid of Giza', location: { lat: 29.9792345, lng: 31.1320132 }, textToSearch: 'Great Pyramid of Giza', keywordIndex: '0' },
+            { title: 'The Great Sphinx of Giza', location: { lat: 29.975589, lng: 31.1326886 }, textToSearch: 'Great Sphinx of Giza', keywordIndex: '0' },
+            { title: 'Cairo Tower', location: { lat: 30.0487422, lng: 31.2214643 }, textToSearch: 'Cairo Tower', keywordIndex: '0' },
+            { title: 'Mosque of Sultan Hassan', location: { lat: 30.04642, lng: 31.2335173 }, textToSearch: 'Mosque-Madrassa of Sultan Hassan', keywordIndex: '0' },
+            { title: 'Museum of Islamic Art Cairo', location: { lat: 30.0574029, lng: 31.2363723 }, textToSearch: 'Museum of Islamic Art Cairo', keywordIndex: '0' },
+
         ],
-        filteredLocations : [
-            {title: 'Mortuary Temple of Hatshepsut', location: {lat: 25.7370083, lng: 32.6049106}, textToSearch:'Mortuary Temple of Hatshepsut', keywordIndex:'0'},
-            {title: 'Temple of Karnak', location: {lat: 25.7188346, lng: 32.6550816}, textToSearch:'Karnak', keywordIndex:'2'},
-            {title: 'Valley of the Queens', location: {lat: 25.7285836, lng: 32.5907332}, textToSearch:'Valley of the Queens', keywordIndex:'0'},
-            {title: 'Medinet Habu', location: {lat: 25.7193131, lng: 32.5991514}, textToSearch:'Medinet Habu (temple)', keywordIndex:'0'}
-            // {title: 'Tombs of the Nobles', location: {lat: 25.7317558, lng: 32.6048123}, textToSearch:'List of Theban tombs', placeID:''}
+        filteredLocations: [
+            { title: 'Mortuary Temple of Hatshepsut', location: { lat: 25.7370083, lng: 32.6049106 }, textToSearch: 'Mortuary Temple of Hatshepsut', keywordIndex: '0' },
+            { title: 'Temple of Karnak', location: { lat: 25.7188346, lng: 32.6550816 }, textToSearch: 'Karnak', keywordIndex: '2' },
+            { title: 'Valley of the Queens', location: { lat: 25.7285836, lng: 32.5907332 }, textToSearch: 'Valley of the Queens', keywordIndex: '0' },
+            { title: 'Medinet Habu', location: { lat: 25.7193131, lng: 32.5991514 }, textToSearch: 'Medinet Habu (temple)', keywordIndex: '0' },
+            { title: 'The Great Pyramid of Giza', location: { lat: 29.9792345, lng: 31.1320132 }, textToSearch: 'Great Pyramid of Giza', keywordIndex: '0' },
+            { title: 'The Great Sphinx of Giza', location: { lat: 29.975589, lng: 31.1326886 }, textToSearch: 'Great Sphinx of Giza', keywordIndex: '0' },
+            { title: 'Cairo Tower', location: { lat: 30.0487422, lng: 31.2214643 }, textToSearch: 'Cairo Tower', keywordIndex: '0' },
+            { title: 'Mosque of Sultan Hassan', location: { lat: 30.04642, lng: 31.2335173 }, textToSearch: 'Mosque-Madrassa of Sultan Hassan', keywordIndex: '0' },
+            { title: 'Museum of Islamic Art Cairo', location: { lat: 30.0574029, lng: 31.2363723 }, textToSearch: 'Museum of Islamic Art Cairo', keywordIndex: '0' },
         ],
-        myMap:{},
-        markers:[],
+        myMap: {},
+        markers: [],
         query: ''
 
-      }
+    }
 
     // setLocationId(locId, locTitle){
     //     debugger
@@ -56,11 +65,11 @@ class Navigation extends Component {
         this.Map.showClicked(evt);
     }
 
-    updateQuery(queryString){
+    updateQuery(queryString) {
         debugger
         this.state.filteredLocations = []
         let query = queryString.trim()
-        this.setState({query: query});
+        this.setState({ query: query });
         this.state.locations.map(function (location) {
             debugger
             if (location.title.toLowerCase().includes(query.toLowerCase())) { // Neglect case sensitive
@@ -79,30 +88,30 @@ class Navigation extends Component {
                 <nav id="mySidenav" className="sidenav box20">
 
                     <ul>
-                    <input
-                                id='filter'
-                                type="text"
-                                placeholder="Filter by location title"
-                                value={this.state.query}
-                                onChange={(event) => this.updateQuery(event.target.value)}
-                            />
-                        {this.state.filteredLocations.map((location)=>(
-                        <li className="nav_item">
-                        <a href="#" onClick={this.showClicked}>{location.title} </a></li>
+                        <input
+                            id='filter'
+                            type="text"
+                            placeholder="Filter by location title"
+                            value={this.state.query}
+                            onChange={(event) => this.updateQuery(event.target.value)}
+                        />
+                        {this.state.filteredLocations.map((location) => (
+                            <li className="nav_item">
+                                <a href="#" onClick={this.showClicked}>{location.title} </a></li>
                         ))}
                     </ul>
                 </nav>
                 <div id="map" className="box80">
-                   
+
                     <Map
                         id="myMap"
                         options={{
-                        center: { lat: 41.0082, lng: 28.9784 },
-                        zoom: 13
+                            center: { lat: 41.0082, lng: 28.9784 },
+                            zoom: 13
                         }}
                         locations={this.state.filteredLocations}
                         onRef={ref => (this.Map = ref)}
-                        // setLocationId = {this.state.setLocationId}
+                    // setLocationId = {this.state.setLocationId}
                     />
                 </div>
             </div >
