@@ -105,17 +105,16 @@ class Map extends Component {
             placeId: placeId,
           };
           service.getDetails(request, function (place, status) {
-            //   debugger
-              content = '<img src='+place.photos[0].getUrl({'maxWidth': 200, 'maxHeight': 220})+'>' 
-                        + '<img src='+place.photos[1].getUrl({'maxWidth': 200, 'maxHeight': 220})+'>'
-                        + '<img src='+place.photos[3].getUrl({'maxWidth': 200, 'maxHeight': 220})+'>'
+              debugger
+              content = '<img src='+place.photos[0].getUrl({'maxWidth': 200, 'maxHeight': 220})+' '+'alt='+ selMarker.title +'>' 
+                        + '<img src='+place.photos[1].getUrl({'maxWidth': 200, 'maxHeight': 220})+' '+'alt='+ selMarker.title +'>'
+                        + '<img src='+place.photos[3].getUrl({'maxWidth': 200, 'maxHeight': 220})+' '+'alt='+ selMarker.title +'>'
               fetch(`https://en.wikipedia.org/w/api.php?&origin=*&action=opensearch&search='${selMarker.textToSearch}'&limit=5`)
             .then(function (resp) {
                 return resp.json()
             }.bind(this)).then(function (data) {
                 debugger
                 keywordIndex = selMarker.keywordIndex
-                // (selMarker.textToSearch==='Karnak')?articleToShow=data[2][2]:''
                 this.state.largeInfowindow.setContent('<div class="title">' + '<h2>' + selMarker.title + '</h2>'
                     + '</div>' + '<div>' + '<span>' + data[2][keywordIndex] + '</span>' + '</div>' + '<div class="link">'
                     + '<a href=' + data[3][keywordIndex]+ '>' + data[3][keywordIndex] + '</a>' + '</div>' + '<div>' + content +'</div>'
