@@ -111,9 +111,19 @@ class Map extends Component {
                 service.getDetails(request, function (place, status) {
                     if (status === 'OK') {
                         debugger
-                        content = '<img src=' + place.photos[0].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
+                        if('photos' in place){
+                            if ('0' in place.photos && '1' in place.photos && '2' in place.photos) {
+                                content = '<img src=' + place.photos[0].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
                             + '<img src=' + place.photos[1].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
                             + '<img src=' + place.photos[3].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
+                            }
+                        }else{
+                            alert('Cannot retreive images for the location: '+ selMarker.title)
+                            content=''
+                        }
+                        // content = '<img src=' + place.photos[100].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
+                        //     + '<img src=' + place.photos[1].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
+                        //     + '<img src=' + place.photos[3].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
                         fetch(`https://en.wikipedia.org/w/api.php?&origin=*&action=opensearch&search='${selMarker.textToSearch}'&limit=5`)
                             .then(function (resp) {
                                 return resp.json()
@@ -162,13 +172,14 @@ class Map extends Component {
 
     showClicked(selected) {
         // debugger
+        let selMarker;
         var defaultIcon = this.makeMarkerIcon('0091ff');
         var highlightedIcon = this.makeMarkerIcon('FFFF24');
         let text = selected.target.text.trim()
         for (let i = 0; i < this.state.markers.length; i++) {
             if (this.state.markers[i].title === text) {
                 this.state.markers[i].setIcon(highlightedIcon)
-                let selMarker = this.state.markers[i]
+                selMarker = this.state.markers[i]
                 if (this.state.largeInfowindow.this != this.state.markers[i]) {
                     this.state.largeInfowindow.this = this.state.markers[i];
                     this.state.largeInfowindow.open(this.state.myMap, this.state.markers[i]);
@@ -178,6 +189,11 @@ class Map extends Component {
                 this.state.markers[i].setIcon(defaultIcon)
             }
         }
+        debugger
+        let selectedLocation = this.props.locations.filter(loc=>loc.title===text)
+        var center = new window.google.maps.LatLng(selectedLocation[0].location.lat,selectedLocation[0].location.lng);
+        this.state.myMap.panTo(center);
+        this.state.myMap.setZoom(15)
     }
 
     clearMarkers() {
