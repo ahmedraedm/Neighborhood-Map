@@ -23,7 +23,7 @@ class Map extends Component {
         options: PropTypes.object.isRequired,
         onRef: PropTypes.object.isRequired,
         id: PropTypes.string.isRequired
-        }
+    }
 
     state = {
         markers: [],
@@ -90,7 +90,6 @@ class Map extends Component {
             // debugger
             this.state.markers.push(marker)
         }.bind(this))
-
         // debugger
         this.setState({
             myMap: map
@@ -100,7 +99,7 @@ class Map extends Component {
 
     fetch(selMarker) {
         // debugger
-        let placeId,content,keywordIndex,firstPhoto = ''
+        let placeId, content, keywordIndex, firstPhoto = ''
         let photoIndex = []
         var request = {
             location: this.state.myMap.getCenter(),
@@ -122,18 +121,17 @@ class Map extends Component {
                 service.getDetails(request, function (place, status) {
                     if (status === 'OK') {
                         // debugger
-                        if('photos' in place){
+                        if ('photos' in place) {
                             if ('8' in place.photos) {
                                 // debugger
                                 photoIndex = selMarker.photoIndex
-                                // firstPhoto = photoIndex[0];
                                 content = '<img src=' + place.photos[photoIndex[0]].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
-                            + '<img src=' + place.photos[photoIndex[1]].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
-                            + '<img src=' + place.photos[photoIndex[2]].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
+                                    + '<img src=' + place.photos[photoIndex[1]].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
+                                    + '<img src=' + place.photos[photoIndex[2]].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
                             }
-                        }else{
-                            alert('Cannot retreive images for the location: '+ selMarker.title)
-                            content=''
+                        } else {
+                            alert('Cannot retreive images for the location: ' + selMarker.title)
+                            content = ''
                         }
                         fetch(`https://en.wikipedia.org/w/api.php?&origin=*&action=opensearch&search='${selMarker.textToSearch}'&limit=5`)
                             .then(function (resp) {
@@ -143,13 +141,13 @@ class Map extends Component {
                                     // debugger
                                     keywordIndex = selMarker.keywordIndex
                                     this.state.largeInfowindow.setContent(
-                                      '<div id="infoWindow">'
-                                    + '<div class="title">' + '<h2>' + selMarker.title + '</h2>'+'</div>' 
-                                    + '<div>' + '<span>' + data[2][keywordIndex] + '</span>' + '</div>' 
-                                    + '<div class="link">'+ '<a href=' + data[3][keywordIndex] + '>' + data[3][keywordIndex] + '</a>' + '</div>' 
-                                    + '<div>' + content + '</div>'
-                                    + '<div><span id="source">' + 'Source: ' + '<a href=https://en.wikipedia.org/wiki/Main_Page>Wikipedia</a>' + '</span></div>'
-                                    + '</div>');
+                                        '<div id="infoWindow">'
+                                        + '<div class="title">' + '<h2>' + selMarker.title + '</h2>' + '</div>'
+                                        + '<div>' + '<span>' + data[2][keywordIndex] + '</span>' + '</div>'
+                                        + '<div class="link">' + '<a href=' + data[3][keywordIndex] + '>' + data[3][keywordIndex] + '</a>' + '</div>'
+                                        + '<div>' + content + '</div>'
+                                        + '<div><span id="source">' + 'Source: ' + '<a href=https://en.wikipedia.org/wiki/Main_Page>Wikipedia</a>' + '</span></div>'
+                                        + '</div>');
                                 } else {
                                     alert('Cannot load article data for this location: ' + selMarker.title)  // Couldn't retreive location article
                                 }
@@ -205,8 +203,8 @@ class Map extends Component {
             }
         }
         // debugger
-        let selectedLocation = this.props.locations.filter(loc=>loc.title===text)
-        var center = new window.google.maps.LatLng(selectedLocation[0].location.lat,selectedLocation[0].location.lng);
+        let selectedLocation = this.props.locations.filter(loc => loc.title === text)
+        var center = new window.google.maps.LatLng(selectedLocation[0].location.lat, selectedLocation[0].location.lng);
         this.state.myMap.panTo(center);
         this.state.myMap.setZoom(15)
     }
@@ -233,7 +231,6 @@ class Map extends Component {
             }
         }.bind(this))
     }
-
 
     makeMarkerIcon(markerColor) {
         var markerImage = new window.google.maps.MarkerImage(
@@ -277,11 +274,9 @@ class Map extends Component {
 
     render() {
         return (
-            <div id={this.props.id}  className="map" role="application" aria-label="locations in map" />
+            <div id={this.props.id} className="map" role="application" aria-label="locations in map" />
         );
     }
 }
-
-
 
 export default Map

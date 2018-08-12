@@ -10,8 +10,6 @@ class Navigation extends Component {
         this.hamburgerIcon = this.hamburgerIcon.bind(this);
         this.showClicked = this.showClicked.bind(this);
         this.updateQuery = this.updateQuery.bind(this);
-        // this.setLocationId = this.setLocationId.bind(this);
-
     }
 
     state = {
@@ -41,7 +39,6 @@ class Navigation extends Component {
         myMap: {},
         markers: [],
         query: ''
-
     }
 
     hamburgerIcon() {

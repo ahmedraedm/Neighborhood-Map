@@ -59,6 +59,7 @@ Each Marker has a specific info window which pops up on marker click. Only one I
 * [http://cuneyt.aliustaoglu.biz/en/using-google-maps-in-react-without-custom-libraries/]
 * [https://www.wikipedia.org/]
 * [https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#making-a-progressive-web-app]
+* [https://github.com/kriasoft/react-starter-kit/issues/909]
 
 ### Services
 
