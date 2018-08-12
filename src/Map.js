@@ -44,7 +44,8 @@ class Map extends Component {
                 textToSearch: x.textToSearch,
                 animation: window.google.maps.Animation.DROP,
                 icon: defaultIcon,
-                keywordIndex: x.keywordIndex
+                keywordIndex: x.keywordIndex,
+                photoIndex: x.photoIndex
                 // id: placeId
             })
             marker.addListener('click', function (e) {
@@ -90,9 +91,8 @@ class Map extends Component {
 
     fetch(selMarker) {
         // debugger
-        let placeId = ''
-        let content = ''
-        let keywordIndex = ''
+        let placeId,content,keywordIndex,firstPhoto = ''
+        let photoIndex = []
         var request = {
             location: this.state.myMap.getCenter(),
             radius: '500',
@@ -114,10 +114,13 @@ class Map extends Component {
                     if (status === 'OK') {
                         // debugger
                         if('photos' in place){
-                            if ('0' in place.photos && '1' in place.photos && '2' in place.photos) {
-                                content = '<img src=' + place.photos[0].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
-                            + '<img src=' + place.photos[1].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
-                            + '<img src=' + place.photos[3].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
+                            if ('8' in place.photos) {
+                                debugger
+                                photoIndex = selMarker.photoIndex
+                                // firstPhoto = photoIndex[0];
+                                content = '<img src=' + place.photos[photoIndex[0]].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
+                            + '<img src=' + place.photos[photoIndex[1]].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
+                            + '<img src=' + place.photos[photoIndex[2]].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
                             }
                         }else{
                             alert('Cannot retreive images for the location: '+ selMarker.title)
