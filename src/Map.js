@@ -26,9 +26,11 @@ class Map extends Component {
 
     onScriptLoad() {
         // debugger
+        let infoWindowContent = '<div id="infoWindow"></div>'
         this.props.onRef(this)
         var defaultIcon = this.makeMarkerIcon('0091ff');
         var highlightedIcon = this.makeMarkerIcon('FFFF24');
+        // debugger
         var largeInfowindow = new window.google.maps.InfoWindow();
         this.state.largeInfowindow = largeInfowindow
         const map = new window.google.maps.Map(
@@ -48,13 +50,13 @@ class Map extends Component {
             marker.addListener('click', function (e) {
                 // debugger
                 let selMarker = this.getMarker(e);
-                debugger
+                // debugger
                 if (this.state.largeInfowindow.this != selMarker) {
                     this.state.largeInfowindow.this = selMarker;
                     this.state.largeInfowindow.open(map, selMarker);
                     selMarker.setIcon(highlightedIcon);
                     this.state.largeInfowindow.addListener('closeclick', function () {
-                        debugger
+                        // debugger
                         console.log(selMarker)
                         this.state.largeInfowindow.this = null;
                         this.clearHighlight();
@@ -69,7 +71,7 @@ class Map extends Component {
                 this.setIcon(highlightedIcon);
             });
             marker.addListener('mouseup', function () {
-                debugger
+                // debugger
                 this.clearHighlight();
             }.bind(this));
             marker.addListener('mouseout', function () {
@@ -79,7 +81,7 @@ class Map extends Component {
             this.state.markers.push(marker)
         }.bind(this))
 
-        debugger
+        // debugger
         this.setState({
             myMap: map
         })
@@ -101,7 +103,7 @@ class Map extends Component {
         service.textSearch(request, function (results, status) {
             // debugger
             let placeIdText = 'place_id'
-            debugger
+            // debugger
             //Error Handling
             if (placeIdText in results[0]) {
                 placeId = results[0].place_id
@@ -110,7 +112,7 @@ class Map extends Component {
                 }
                 service.getDetails(request, function (place, status) {
                     if (status === 'OK') {
-                        debugger
+                        // debugger
                         if('photos' in place){
                             if ('0' in place.photos && '1' in place.photos && '2' in place.photos) {
                                 content = '<img src=' + place.photos[0].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
@@ -121,26 +123,27 @@ class Map extends Component {
                             alert('Cannot retreive images for the location: '+ selMarker.title)
                             content=''
                         }
-                        // content = '<img src=' + place.photos[100].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
-                        //     + '<img src=' + place.photos[1].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
-                        //     + '<img src=' + place.photos[3].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
                         fetch(`https://en.wikipedia.org/w/api.php?&origin=*&action=opensearch&search='${selMarker.textToSearch}'&limit=5`)
                             .then(function (resp) {
                                 return resp.json()
                             }.bind(this)).then(function (data) {
                                 if (data) {
-                                    debugger
+                                    // debugger
                                     keywordIndex = selMarker.keywordIndex
-                                    this.state.largeInfowindow.setContent('<div class="title">' + '<h2>' + selMarker.title + '</h2>'
-                                        + '</div>' + '<div>' + '<span>' + data[2][keywordIndex] + '</span>' + '</div>' + '<div class="link">'
-                                        + '<a href=' + data[3][keywordIndex] + '>' + data[3][keywordIndex] + '</a>' + '</div>' + '<div>' + content + '</div>'
-                                        + '<div><span id="source">' + 'Source: ' + '<a href=https://en.wikipedia.org/wiki/Main_Page>Wikipedia</a>' + '</span></div>');
+                                    this.state.largeInfowindow.setContent(
+                                      '<div id="infoWindow">'
+                                    + '<div class="title">' + '<h2>' + selMarker.title + '</h2>'+'</div>' 
+                                    + '<div>' + '<span>' + data[2][keywordIndex] + '</span>' + '</div>' 
+                                    + '<div class="link">'+ '<a href=' + data[3][keywordIndex] + '>' + data[3][keywordIndex] + '</a>' + '</div>' 
+                                    + '<div>' + content + '</div>'
+                                    + '<div><span id="source">' + 'Source: ' + '<a href=https://en.wikipedia.org/wiki/Main_Page>Wikipedia</a>' + '</span></div>'
+                                    + '</div>');
                                 } else {
                                     alert('Cannot load article data for this location: ' + selMarker.title)  // Couldn't retreive location article
                                 }
                             }.bind(this))
                             .catch(function (e) {
-                                debugger
+                                // debugger
                                 alert('Cannot load Infowindow data due to the following error: \n' + '"' + e.message + '"')
                             })
                     } else {
@@ -189,7 +192,7 @@ class Map extends Component {
                 this.state.markers[i].setIcon(defaultIcon)
             }
         }
-        debugger
+        // debugger
         let selectedLocation = this.props.locations.filter(loc=>loc.title===text)
         var center = new window.google.maps.LatLng(selectedLocation[0].location.lat,selectedLocation[0].location.lng);
         this.state.myMap.panTo(center);
@@ -207,7 +210,7 @@ class Map extends Component {
         this.clearMarkers()
         let map = this.state.myMap;
         this.state.markers.map(function (marker) {
-            debugger
+            // debugger
             if (!marker.title.toLowerCase().includes(query.toLowerCase())) {
                 marker.setMap(null);
             } else {
@@ -262,7 +265,7 @@ class Map extends Component {
 
     render() {
         return (
-            <div id={this.props.id} />
+            <div id={this.props.id}  className="map" />
         );
     }
 }

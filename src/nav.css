@@ -1,5 +1,4 @@
 body {
-    /* font-family: sans-serif; */
       font-family: 'Times New Roman', Times, serif;
   font-size: 30px;
     transition: background-color .5s;
@@ -15,13 +14,16 @@ body {
     background-color:darkgray;
     overflow-x: hidden;
     transition: 0.5s;
+    position: fixed;
+    margin-top: 71px;
   }
+
   
   .sidenav a {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 20px;
-    color: #818181;
+    color: #585757;
     display: block;
     transition: 0.3s;
   }
@@ -60,7 +62,6 @@ body {
   }
 
   ul {
-    /* list-style-type: none; */
     padding: 0%;
     width: 100%;
   }
@@ -119,25 +120,73 @@ body {
   .open{
     width: 250px
   }
-  shrinkMap{
-    width: 30%;
+
+  #myMap{
+    height: 90%;
+    position: absolute;
+  }
+  #title{
+    color: white;
+    padding: 0px;
+    width: 100% ;   
+    text-align: center;
+    letter-spacing: 5px;
   }
 
-  @media screen and (min-width: 650px) {
+  .nav_item{
+    border-bottom: 1px solid #979797
+  }
+
+
+
+  @media screen and (min-width: 950px) {
     #icon{
       visibility: hidden;
-    }
-    .box20 {
-      width: 20%;
-    }
-
-  }
-
-  @media screen and (max-width: 649px) {
-    .box20 {
       width: 0%;
     }
-    #myMap{
+    #title{
       width: 100%;
+    }
+    .nav {
+      width: 20%;
+    }
+    .map{
+      width: 80%
+    }
+    #myMap{
+      margin-left: 20%;
+    }
+    #infoWindow{
+      max-width: 650px;
+      /* max-height: 350px */
+    }
+}
+
+  @media screen and (max-width: 949px) {
+    #icon{
+      width: 10%;
+    }
+    #title{
+      width: 90%;
+    }
+    .nav {
+      width: 0%;
+    }
+    .map{
+      width: 100%
+    }
+    .open{
+      width: 35%
+    }
+    #myMap{
+      margin-left: 0%;
+    }
+    #infoWindow{
+      width: 300px;
+      height: 200px;
+      overflow-y: visible
+    }
+    #title{
+      letter-spacing: 2px;
     }
   }

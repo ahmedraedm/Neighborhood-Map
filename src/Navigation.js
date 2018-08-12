@@ -44,20 +44,9 @@ class Navigation extends Component {
 
     }
 
-    // setLocationId(locId, locTitle){
-    //     debugger
-    //     this.state.locations.filter(loc=>loc.title===locTitle).placeID=locId
-    // }
-
     hamburgerIcon() {
         // debugger
         var drawer = document.querySelector('#mySidenav');
-        var map = document.querySelector('#map');
-        map.classList.toggle('box80');
-
-        drawer.classList.toggle('box20');
-        map.classList.toggle('shrinkMap');
-
         drawer.classList.toggle('open');
     }
 
@@ -66,12 +55,12 @@ class Navigation extends Component {
     }
 
     updateQuery(queryString) {
-        debugger
+        // debugger
         this.state.filteredLocations = []
         let query = queryString.trim()
         this.setState({ query: query });
         this.state.locations.map(function (location) {
-            debugger
+            // debugger
             if (location.title.toLowerCase().includes(query.toLowerCase())) { // Neglect case sensitive
                 this.state.filteredLocations.push(location)
             }
@@ -83,15 +72,17 @@ class Navigation extends Component {
         return (
             <div className="container">
                 <div className="box" id="main">
-                    <span id="icon" onClick={this.hamburgerIcon}>&#9776; </span>
+                <div className="container">
+                    <span id="icon" onClick={this.hamburgerIcon}>&#9776;</span>
+                    <span id="title">Welcome To EGYPT</span>
+                    </div>
                 </div>
-                <nav id="mySidenav" className="sidenav box20">
-
+                <nav id="mySidenav" className="sidenav nav">
                     <ul>
                         <input
                             id='filter'
                             type="text"
-                            placeholder="Filter by location title"
+                            placeholder="Filter by place name"
                             value={this.state.query}
                             onChange={(event) => this.updateQuery(event.target.value)}
                         />
@@ -101,8 +92,7 @@ class Navigation extends Component {
                         ))}
                     </ul>
                 </nav>
-                <div id="map" className="box80">
-
+                <div id="map">
                     <Map
                         id="myMap"
                         options={{
