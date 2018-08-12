@@ -21,7 +21,7 @@ class Map extends Component {
     static propTypes = {
         locations: PropTypes.array.isRequired,
         options: PropTypes.object.isRequired,
-        onRef: PropTypes.object.isRequired,
+        onRef: PropTypes.func.isRequired,
         id: PropTypes.string.isRequired
     }
 
