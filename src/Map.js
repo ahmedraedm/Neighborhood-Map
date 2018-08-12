@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
+import PropTypes from 'prop-types';
 import './nav.css'
 
 class Map extends Component {
@@ -16,6 +17,13 @@ class Map extends Component {
         this.clearMarkers = this.clearMarkers.bind(this);
         this.fetch = this.fetch.bind(this);
     }
+
+    static propTypes = {
+        locations: PropTypes.array.isRequired,
+        options: PropTypes.object.isRequired,
+        onRef: PropTypes.object.isRequired,
+        id: PropTypes.string.isRequired
+        }
 
     state = {
         markers: [],
@@ -60,6 +68,7 @@ class Map extends Component {
                         // debugger
                         console.log(selMarker)
                         this.state.largeInfowindow.this = null;
+                        // debugger
                         this.clearHighlight();
                     }.bind(this));
                 } else {
@@ -115,7 +124,7 @@ class Map extends Component {
                         // debugger
                         if('photos' in place){
                             if ('8' in place.photos) {
-                                debugger
+                                // debugger
                                 photoIndex = selMarker.photoIndex
                                 // firstPhoto = photoIndex[0];
                                 content = '<img src=' + place.photos[photoIndex[0]].getUrl({ 'maxWidth': 200, 'maxHeight': 220 }) + ' ' + 'alt=' + selMarker.title + '>'
