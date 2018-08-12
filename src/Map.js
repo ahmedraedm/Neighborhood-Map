@@ -265,7 +265,7 @@ class Map extends Component {
 
     render() {
         return (
-            <div id={this.props.id}  className="map" />
+            <div id={this.props.id}  className="map" role="application" aria-label="locations in map" />
         );
     }
 }

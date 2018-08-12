@@ -73,13 +73,13 @@ class Navigation extends Component {
             <div className="container">
                 <div className="box" id="main">
                 <div className="container">
-                    <span id="icon" onClick={this.hamburgerIcon}>&#9776;</span>
-                    <span id="title">Welcome To EGYPT</span>
+                    <span id="icon" onClick={this.hamburgerIcon} title="Hamburger menu Icon" aria-label="Hamburger menu Icon">&#9776;</span>
+                    <span id="title" title="Application title" aria-label="Application title">Welcome To EGYPT</span>
                     </div>
                 </div>
                 <nav id="mySidenav" className="sidenav nav">
-                    <ul>
-                        <input
+                    <ul role="navigation" aria-label="Locations navigation">
+                        <input role="textbox" aria-label="Filter places"
                             id='filter'
                             type="text"
                             placeholder="Filter by place name"
@@ -92,7 +92,7 @@ class Navigation extends Component {
                         ))}
                     </ul>
                 </nav>
-                <div id="map">
+                <div id="map" role="application" aria-label="locations in map">
                     <Map
                         id="myMap"
                         options={{
