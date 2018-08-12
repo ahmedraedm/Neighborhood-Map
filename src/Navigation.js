@@ -84,7 +84,7 @@ class Navigation extends Component {
                             onChange={(event) => this.updateQuery(event.target.value)}
                         />
                         {this.state.filteredLocations.map((location) => (
-                            <li className="nav_item">
+                            <li className="nav_item" key={location.title}>
                                 <a href="#" onClick={this.showClicked}>{location.title} </a></li>
                         ))}
                     </ul>
